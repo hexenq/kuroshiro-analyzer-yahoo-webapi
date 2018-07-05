@@ -56,14 +56,25 @@ class Analyzer {
             })
                 .then((res) => {
                     const result = [];
-                    const resObj = xmlParser.parse(res.data);
+                    const resObj = xmlParser.parse(res.data, {
+                        trimValues: false // in case of the whitespace character
+                    });
                     if (resObj.ResultSet.ma_result.total_count === 0) return resolve(result);
-                    for (let i = 0; i < resObj.ResultSet.ma_result.word_list.word.length; i++) {
+                    if (resObj.ResultSet.ma_result.total_count === 1) {
                         result.push({
-                            surface_form: resObj.ResultSet.ma_result.word_list.word[i].surface,
-                            pos: resObj.ResultSet.ma_result.word_list.word[i].pos,
-                            reading: resObj.ResultSet.ma_result.word_list.word[i].reading
+                            surface_form: resObj.ResultSet.ma_result.word_list.word.surface,
+                            pos: resObj.ResultSet.ma_result.word_list.word.pos,
+                            reading: resObj.ResultSet.ma_result.word_list.word.reading
                         });
+                    }
+                    else {
+                        for (let i = 0; i < resObj.ResultSet.ma_result.word_list.word.length; i++) {
+                            result.push({
+                                surface_form: resObj.ResultSet.ma_result.word_list.word[i].surface,
+                                pos: resObj.ResultSet.ma_result.word_list.word[i].pos,
+                                reading: resObj.ResultSet.ma_result.word_list.word[i].reading
+                            });
+                        }
                     }
                     resolve(result);
                 })
