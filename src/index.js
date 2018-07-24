@@ -1,8 +1,16 @@
-import axios from "axios";
+import jsonp from "jsonp-client";
 import querystring from "querystring";
-import xmlParser from "fast-xml-parser";
 
-const API_URL = "https://jlp.yahooapis.jp/MAService/V1/parse";
+const YQL_URL = "http://query.yahooapis.com/v1/public/yql";
+const API_URL = "http://jlp.yahooapis.jp/MAService/V1/parse";
+
+function addCallback(url) {
+    // The URL already has a callback
+    if (url.match(/callback=[a-z]/i)) {
+        return url;
+    }
+    return url + (`&callback=cb${Math.random()}`).replace(".", "");
+}
 
 /**
  * Yahoo WebAPI Analyzer
@@ -11,12 +19,10 @@ class Analyzer {
     /**
      * Constructor
      * @param {string} [appId] Your Yahoo application ID.
-     * @param {Number} [timeout] Request timeout in millisecond.
      */
-    constructor({ appId, timeout } = {}) {
+    constructor({ appId } = {}) {
         this._analyzer = null;
         this._appId = appId;
-        this._timeout = timeout || 5000;
     }
 
     /**
@@ -43,24 +49,24 @@ class Analyzer {
     parse(str = "") {
         const self = this;
         return new Promise((resolve, reject) => {
-            const paramJson = {
+            const apiParamJson = {
                 appid: self._appId,
                 sentence: str,
                 results: "ma"
             };
-            axios({
-                method: "post",
-                url: API_URL,
-                data: querystring.stringify(paramJson),
-                timeout: self._timeout
-            })
-                .then((res) => {
+            const yqlQuery = `SELECT * FROM xml WHERE url = '${API_URL}?${querystring.stringify(apiParamJson)}'`;
+            const queryJson = {
+                q: yqlQuery,
+                format: "json"
+            };
+            jsonp(
+                addCallback(`${YQL_URL}?${querystring.stringify(queryJson)}`),
+                (err, res) => {
+                    if (err) return reject(err);
                     const result = [];
-                    const resObj = xmlParser.parse(res.data, {
-                        trimValues: false // in case of the whitespace character
-                    });
-                    if (resObj.ResultSet.ma_result.total_count === 0) return resolve(result);
-                    if (resObj.ResultSet.ma_result.total_count === 1) {
+                    const resObj = res.query.results;
+                    if (resObj.ResultSet.ma_result.total_count === "0") return resolve(result);
+                    if (resObj.ResultSet.ma_result.total_count === "1") {
                         result.push({
                             surface_form: resObj.ResultSet.ma_result.word_list.word.surface,
                             pos: resObj.ResultSet.ma_result.word_list.word.pos,
@@ -77,10 +83,8 @@ class Analyzer {
                         }
                     }
                     resolve(result);
-                })
-                .catch((err) => {
-                    reject(err);
-                });
+                }
+            );
         });
     }
 }

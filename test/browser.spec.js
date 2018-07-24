@@ -1,10 +1,10 @@
 /**
- * @jest-environment node
+ * @jest-environment jsdom
  */
 
 import Analyzer from "../src";
 
-describe("kuroshiro-analyzer-yahoo-webapi Node Test", () => {
+describe("kuroshiro-analyzer-yahoo-webapi Browser Test", () => {
     const EXAMPLE_TEXT = "すもももももも";
     const APPID = "DUMMY_PLEASE_USE_YOUR_OWN_APPID"; // DUMMY_PLEASE_USE_YOUR_OWN_APPID
 

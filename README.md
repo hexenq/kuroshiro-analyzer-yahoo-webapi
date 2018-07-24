@@ -19,6 +19,6 @@
     </tr>
     <tr>
         <td>Browser</td>
-        <td>✗</td>
+        <td>✓</td>
     </tr>
 </table>
