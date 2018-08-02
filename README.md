@@ -1,7 +1,7 @@
 # kuroshiro-analyzer-yahoo-webapi
- 
+
 [![Build Status](https://travis-ci.com/hexenq/kuroshiro-analyzer-yahoo-webapi.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro-analyzer-yahoo-webapi)
-<!-- [![npm version](https://badge.fury.io/js/kuroshiro-analyzer-yahoo-webapi.svg)](http://badge.fury.io/js/kuroshiro-analyzer-yahoo-webapi)) -->
+[![npm version](https://badge.fury.io/js/kuroshiro-analyzer-yahoo-webapi.svg)](http://badge.fury.io/js/kuroshiro-analyzer-yahoo-webapi)
 
 <table>
     <tr>
@@ -10,7 +10,7 @@
     </tr>
     <tr>
         <td>Description</td>
-        <td colspan=2>Yahoo WebAPI morphological analyzer for kuroshiro</td>
+        <td colspan=2>Yahoo WebAPI morphological analyzer for <a href="https://github.com/hexenq/kuroshiro">kuroshiro</a>.</td>
     </tr>
     <tr>
         <td rowspan=2>Compatibility</td>
@@ -22,3 +22,30 @@
         <td>✓</td>
     </tr>
 </table>
+
+## Install
+```sh
+$ npm install kuroshiro-analyzer-yahoo-webapi
+```
+*For legacy frontend workflows, you could include `dist/YahooWebAnalyzer.min.js` in your page.*
+
+## Usage with kuroshiro
+### Configure analyzer
+This analyzer utilizes [Yahoo WebAPI of morphological analysis service](https://developer.yahoo.co.jp/webapi/jlp/ma/v1/parse.html). 
+
+Before you start, you should register your application in Yahoo to get a APP ID. Please visit the link above for more information. 
+
+You need to specify your Yahoo application ID when initializing the analyzer.
+
+```js
+import YahooAnalyzer from "kuroshiro-analyzer-yahoo-webapi";
+
+const analyzer = new YahooAnalyzer({
+    appId: "YOUR_YAHOO_APP_ID"
+});
+
+await kuroshiro.init(analyzer);
+```
+
+### Initialization Parameters
+- `appId`: Your Yahoo application ID
