@@ -75,6 +75,7 @@
         "transform": {
             "^.+\\.jsx?$": "babel-jest"
         },
-        "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.jsx?$"
+        "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.jsx?$",
+        "testURL": "http://localhost"
     }
 }
