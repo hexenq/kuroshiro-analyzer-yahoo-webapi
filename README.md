@@ -27,7 +27,7 @@
 ```sh
 $ npm install kuroshiro-analyzer-yahoo-webapi
 ```
-*For legacy frontend workflows, you could include `dist/YahooWebAnalyzer.min.js` in your page.*
+*For legacy frontend workflows, you could include `dist/kuroshiro-analyzer-yahoo-webapi.min.js` in your page and the exported name is `YahooWebAnalyzer`. (you may first build it from source with `npm run build` after `npm install`)*
 
 ## Usage with kuroshiro
 ### Configure analyzer
@@ -38,9 +38,9 @@ Before you start, you should register your application in Yahoo to get a APP ID.
 You need to specify your Yahoo application ID when initializing the analyzer.
 
 ```js
-import YahooAnalyzer from "kuroshiro-analyzer-yahoo-webapi";
+import YahooWebAnalyzer from "kuroshiro-analyzer-yahoo-webapi";
 
-const analyzer = new YahooAnalyzer({
+const analyzer = new YahooWebAnalyzer({
     appId: "YOUR_YAHOO_APP_ID"
 });
 
