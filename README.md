@@ -49,3 +49,6 @@ await kuroshiro.init(analyzer);
 
 ### Initialization Parameters
 - `appId`: Your Yahoo application ID
+
+## Notice
+This analyzer might not give optimized converted result when converting kanji to romaji with kuroshiro since Yahoo Web API lacks information of pronunciation in analysis result.
