@@ -1,6 +1,6 @@
 {
     "name": "kuroshiro-analyzer-yahoo-webapi",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Yahoo WebAPI morphological analyzer for kuroshiro",
     "main": "lib/index.js",
     "module": "src/index.js",
@@ -11,10 +11,8 @@
         "jest:watch": "npm run jest -- --watch",
         "test": "npm run lint && npm run jest",
         "clean": "rimraf lib dist",
-        "build": "npm run build:cjs && npm run build:umd && npm run build:umd:min",
-        "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
-        "build:umd": "cross-env BABEL_ENV=umd NODE_ENV=development browserify src/index.js -s YahooWebAnalyzer -o dist/kuroshiro-analyzer-yahoo-webapi.js -t [ babelify ]",
-        "build:umd:min": "cross-env BABEL_ENV=umd NODE_ENV=production browserify src/index.js -s YahooWebAnalyzer -g uglifyify -o dist/kuroshiro-analyzer-yahoo-webapi.min.js -t [ babelify ]"
+        "build": "npm run build:cjs",
+        "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib"
     },
     "keywords": [
         "kuroshiro",
@@ -43,8 +41,7 @@
     "homepage": "https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi",
     "dependencies": {
         "axios": "^0.18.0",
-        "fast-xml-parser": "^3.11.1",
-        "jsonp-client": "^1.1.1"
+        "fast-xml-parser": "^3.11.1"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",

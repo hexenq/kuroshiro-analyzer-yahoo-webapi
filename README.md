@@ -19,15 +19,17 @@
     </tr>
     <tr>
         <td>Browser</td>
-        <td>✓</td>
+        <td>✗</td>
     </tr>
 </table>
+
+## Attention
+This plugin will no longer be compatible with browser since Yahoo YQL service was retired at Jan 3, 2019. Please update to the latest version of kuroshiro-analyzer-yahoo-webapi.
 
 ## Install
 ```sh
 $ npm install kuroshiro-analyzer-yahoo-webapi
 ```
-*For legacy frontend workflows, you could include `dist/kuroshiro-analyzer-yahoo-webapi.min.js` in your page and the exported name is `YahooWebAnalyzer`. (you may first build it from source with `npm run build` after `npm install`)*
 
 ## Usage with kuroshiro
 ### Configure analyzer
@@ -41,7 +43,7 @@ You need to specify your Yahoo application ID when initializing the analyzer.
 import YahooWebAnalyzer from "kuroshiro-analyzer-yahoo-webapi";
 
 const analyzer = new YahooWebAnalyzer({
-    appId: "YOUR_YAHOO_APP_ID"
+    appId: "YOUR_YAHOO_APP_ID",
 });
 
 await kuroshiro.init(analyzer);
@@ -49,6 +51,7 @@ await kuroshiro.init(analyzer);
 
 ### Initialization Parameters
 - `appId`: Your Yahoo application ID
+- `timeout`: *Optional* Request timeout in millisecond
 
 ## Notice
 This analyzer might not give optimized converted result when converting kanji to romaji with kuroshiro since Yahoo Web API lacks information of pronunciation in analysis result.
