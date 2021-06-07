@@ -1,6 +1,6 @@
 {
     "name": "kuroshiro-analyzer-yahoo-webapi",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Yahoo WebAPI morphological analyzer for kuroshiro",
     "main": "lib/index.js",
     "module": "src/index.js",
@@ -40,7 +40,7 @@
     },
     "homepage": "https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi",
     "dependencies": {
-        "axios": "^0.18.0",
+        "axios": "^0.21.1",
         "fast-xml-parser": "^3.11.1"
     },
     "devDependencies": {
