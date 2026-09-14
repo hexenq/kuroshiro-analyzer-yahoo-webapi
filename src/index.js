@@ -1,28 +1,13 @@
-import axios from "axios";
-import querystring from "querystring";
-import xmlParser from "fast-xml-parser";
+import request from "./request.js";
 
-const API_URL = "https://jlp.yahooapis.jp/MAService/V1/parse";
-
-/**
- * Yahoo WebAPI Analyzer
- */
+/** Yahoo morphological analysis adapter (JSON-RPC V2). */
 class Analyzer {
-    /**
-     * Constructor
-     * @param {string} [appId] Your Yahoo application ID.
-     * @param {Number} [timeout] Request timeout in millisecond.
-     */
     constructor({ appId, timeout } = {}) {
         this._analyzer = null;
         this._appId = appId;
         this._timeout = timeout || 5000;
     }
 
-    /**
-     * Initialize the analyzer
-     * @returns {Promise} Promise object represents the result of initialization
-     */
     init() {
         return new Promise((resolve, reject) => {
             if (this._analyzer == null) {
@@ -35,52 +20,28 @@ class Analyzer {
         });
     }
 
-    /**
-     * Parse the given string
-     * @param {*} str input string
-     * @returns {Promise} Promise object represents the result of parsing
-     */
     parse(str = "") {
-        const self = this;
-        return new Promise((resolve, reject) => {
-            const paramJson = {
-                appid: self._appId,
-                sentence: str,
-                results: "ma"
-            };
-            axios({
-                method: "post",
-                url: API_URL,
-                data: querystring.stringify(paramJson),
-                timeout: self._timeout
-            })
-                .then((res) => {
-                    const result = [];
-                    const resObj = xmlParser.parse(res.data, {
-                        trimValues: false // in case of the whitespace character
-                    });
-                    if (resObj.ResultSet.ma_result.total_count === 0) return resolve(result);
-                    if (resObj.ResultSet.ma_result.total_count === 1) {
-                        result.push({
-                            surface_form: resObj.ResultSet.ma_result.word_list.word.surface,
-                            pos: resObj.ResultSet.ma_result.word_list.word.pos,
-                            reading: resObj.ResultSet.ma_result.word_list.word.reading
-                        });
+        return Promise.resolve().then(() => {
+            if (typeof str !== "string") throw new TypeError("Input must be a string.");
+            if (str === "") return [];
+            if (typeof this._appId !== "string" || !this._appId.trim()) {
+                throw new Error("A Yahoo application ID is required.");
+            }
+            return request(this._appId, str, this._timeout).then((response) => {
+                if (response && response.error) {
+                    const error = new Error(response.error.message || "Yahoo API error");
+                    error.code = response.error.code;
+                    throw error;
+                }
+                const tokens = response && response.result && response.result.tokens;
+                if (!Array.isArray(tokens)) throw new Error("Invalid Yahoo API response.");
+                return tokens.map((token) => {
+                    if (!Array.isArray(token) || [0, 1, 3].some(index => typeof token[index] !== "string")) {
+                        throw new Error("Invalid Yahoo API token.");
                     }
-                    else {
-                        for (let i = 0; i < resObj.ResultSet.ma_result.word_list.word.length; i++) {
-                            result.push({
-                                surface_form: resObj.ResultSet.ma_result.word_list.word[i].surface,
-                                pos: resObj.ResultSet.ma_result.word_list.word[i].pos,
-                                reading: resObj.ResultSet.ma_result.word_list.word[i].reading
-                            });
-                        }
-                    }
-                    resolve(result);
-                })
-                .catch((err) => {
-                    reject(err);
+                    return { surface_form: token[0], pos: token[3], reading: token[1] };
                 });
+            });
         });
     }
 }

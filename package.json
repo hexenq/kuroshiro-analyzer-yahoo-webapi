@@ -2,17 +2,21 @@
     "name": "kuroshiro-analyzer-yahoo-webapi",
     "version": "1.2.1",
     "description": "Yahoo WebAPI morphological analyzer for kuroshiro",
-    "main": "lib/index.js",
+    "main": "index.js",
     "module": "src/index.js",
     "scripts": {
-        "lint": "eslint src test",
-        "lint:fix": "eslint --fix src test --ext .js",
+        "lint": "eslint src test index.js *.mjs",
+        "lint:fix": "npm run lint -- --fix",
         "jest": "jest --verbose",
         "jest:watch": "npm run jest -- --watch",
-        "test": "npm run lint && npm run jest",
-        "clean": "rimraf lib dist",
-        "build": "npm run build:cjs",
-        "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib"
+        "jest:coverage": "jest --verbose --coverage",
+        "test:package": "node test/package-smoke.cjs",
+        "test": "npm run lint && npm run jest && npm run build && npm run test:package",
+        "clean": "rimraf lib",
+        "build": "npm run clean && npm run build:cjs",
+        "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
+        "prepack": "npm run build",
+        "test:live": "node test/live.cjs"
     },
     "keywords": [
         "kuroshiro",
@@ -39,41 +43,33 @@
         "url": "https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi/issues"
     },
     "homepage": "https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi",
-    "dependencies": {
-        "axios": "^0.21.1",
-        "fast-xml-parser": "^3.11.1"
-    },
+    "dependencies": {},
     "devDependencies": {
-        "babel-cli": "^6.26.0",
-        "babel-core": "^6.26.0",
-        "babel-eslint": "^8.2.3",
-        "babel-jest": "^22.4.4",
-        "babel-plugin-add-module-exports": "^0.2.1",
-        "babel-plugin-transform-runtime": "^6.23.0",
-        "babel-preset-env": "^1.6.1",
-        "babelify": "^8.0.0",
-        "browserify": "^16.2.2",
-        "coveralls": "^3.0.1",
-        "cross-env": "^5.1.5",
-        "eslint": "^4.19.1",
-        "eslint-config-airbnb-base": "^12.1.0",
-        "eslint-plugin-html": "^4.0.5",
-        "eslint-plugin-import": "^2.12.0",
-        "jest": "^22.4.4",
-        "uglifyify": "^5.0.0"
-    },
-    "browserify": {
-        "transform": [
-            [
-                "babelify"
-            ]
-        ]
+        "@babel/cli": "^7.29.7",
+        "@babel/core": "^7.29.7",
+        "@babel/preset-env": "^7.29.7",
+        "@eslint/js": "^10.0.1",
+        "acorn": "^8.18.0",
+        "babel-jest": "^30.5.1",
+        "babel-plugin-add-module-exports": "^1.0.4",
+        "cross-env": "^10.1.0",
+        "eslint": "^10.10.0",
+        "globals": "^17.12.0",
+        "jest": "^30.5.1",
+        "rimraf": "^6.1.3"
     },
     "jest": {
         "transform": {
             "^.+\\.jsx?$": "babel-jest"
         },
-        "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.jsx?$",
-        "testURL": "http://localhost"
-    }
+        "testEnvironment": "node",
+        "testMatch": [
+            "**/test/**/*.spec.js"
+        ]
+    },
+    "files": [
+        "index.js",
+        "lib",
+        "src"
+    ]
 }
