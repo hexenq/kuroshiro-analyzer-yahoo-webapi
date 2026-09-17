@@ -12,7 +12,6 @@ Before this analyzer can be recommended again, a valid application ID must be av
 
 The installation and usage instructions below describe the legacy release; they are retained for reference, not as confirmation that the current service works. For new projects, consider [kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji).
 
-[![Build Status](https://travis-ci.com/hexenq/kuroshiro-analyzer-yahoo-webapi.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro-analyzer-yahoo-webapi)
 [![npm version](https://badge.fury.io/js/kuroshiro-analyzer-yahoo-webapi.svg)](http://badge.fury.io/js/kuroshiro-analyzer-yahoo-webapi)
 
 <table>
