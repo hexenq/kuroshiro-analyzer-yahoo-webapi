@@ -1,5 +1,17 @@
 # kuroshiro-analyzer-yahoo-webapi
 
+## Maintenance status
+
+**Maintenance is paused. The API migration is incomplete, and this analyzer is not recommended for new projects.**
+
+The implementation on the default branch and the published npm package use the legacy API. A migration to Yahoo's V2 API is in progress in [draft PR #9](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi/pull/9), but it has not been released or validated against the live service. Passing offline tests does not establish live API compatibility. See [Yahoo's V2 migration announcement](https://developer.yahoo.co.jp/changelog/2022-07-14-jlp.html).
+
+Progress is blocked by account access: the maintainer currently cannot access the existing Yahoo! JAPAN account, and the new-account registration flow requires a Japanese phone number that the maintainer does not have available.
+
+Before this analyzer can be recommended again, a valid application ID must be available and both live API verification and integration testing with the maintained kuroshiro core must pass. There is no release date at present. Do not post application IDs, passwords or other credentials in issues or pull requests.
+
+The installation and usage instructions below describe the legacy release; they are retained for reference, not as confirmation that the current service works. For new projects, consider [kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji).
+
 [![Build Status](https://travis-ci.com/hexenq/kuroshiro-analyzer-yahoo-webapi.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro-analyzer-yahoo-webapi)
 [![npm version](https://badge.fury.io/js/kuroshiro-analyzer-yahoo-webapi.svg)](http://badge.fury.io/js/kuroshiro-analyzer-yahoo-webapi)
 
@@ -24,7 +36,7 @@
 </table>
 
 ## Attention
-This plugin will no longer be compatible with browser since Yahoo YQL service was retired at Jan 3, 2019. Please update to the latest version of kuroshiro-analyzer-yahoo-webapi.
+This plugin is Node.js-only following the retirement of Yahoo YQL. Updating to the current npm release does not complete the pending API migration; see the maintenance status above.
 
 ## Install
 ```sh
