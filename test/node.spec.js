@@ -2,17 +2,17 @@
  * @jest-environment node
  */
 
+import Kuroshiro from "kuroshiro";
 import Analyzer from "../src";
 
 describe("kuroshiro-analyzer-yahoo-webapi Node Test", () => {
     const EXAMPLE_TEXT = "すもももももも";
-    const APPID = "DUMMY_PLEASE_USE_YOUR_OWN_APPID"; // DUMMY_PLEASE_USE_YOUR_OWN_APPID
 
     let analyzer;
 
     it("Initialization", async (done) => {
         analyzer = new Analyzer({
-            appId: APPID
+            appId: process.env.YAHOO_APP_ID
         });
         await analyzer.init();
         done();
@@ -20,7 +20,7 @@ describe("kuroshiro-analyzer-yahoo-webapi Node Test", () => {
 
     it("Repeated Initialization", async (done) => {
         analyzer = new Analyzer({
-            appId: APPID
+            appId: process.env.YAHOO_APP_ID
         });
         try {
             await analyzer.init();
@@ -34,7 +34,7 @@ describe("kuroshiro-analyzer-yahoo-webapi Node Test", () => {
 
     it("Parse Sentence", async (done) => {
         analyzer = new Analyzer({
-            appId: APPID
+            appId: process.env.YAHOO_APP_ID
         });
         await analyzer.init();
 
@@ -53,7 +53,7 @@ describe("kuroshiro-analyzer-yahoo-webapi Node Test", () => {
 
     it("Parse Null", async (done) => {
         analyzer = new Analyzer({
-            appId: APPID
+            appId: process.env.YAHOO_APP_ID
         });
         await analyzer.init();
 
@@ -67,5 +67,40 @@ describe("kuroshiro-analyzer-yahoo-webapi Node Test", () => {
             .catch((err) => {
                 done(err);
             });
+    });
+});
+
+describe("kuroshiro-analyzer-yahoo-webapi Node Integration Test", () => {
+    const EXAMPLE_TEXT = "可愛い";
+    const EXAMPLE_TEXT2 = "2000年";
+
+    let kuroshiro;
+
+    beforeAll(async () => {
+        kuroshiro = new Kuroshiro();
+        await kuroshiro.init(new Analyzer({
+            appId: process.env.YAHOO_APP_ID
+        }));
+    });
+
+    it("Kanji to Hiragana(1)", async () => {
+        const ori = EXAMPLE_TEXT;
+        const result = await kuroshiro.convert(ori, { to: "hiragana" });
+        expect(result).toEqual("かわいい");
+    });
+    it("Kanji to Hiragana(2)", async () => {
+        const ori = EXAMPLE_TEXT2;
+        const result = await kuroshiro.convert(ori, { to: "hiragana" });
+        expect(result).toEqual("2000ねん");
+    });
+    it("Kanji to Hiragana with furigana(1)", async () => {
+        const ori = EXAMPLE_TEXT;
+        const result = await kuroshiro.convert(ori, { mode: "furigana", to: "hiragana" });
+        expect(result).toEqual("<ruby>可愛<rp>(</rp><rt>かわい</rt><rp>)</rp></ruby>い");
+    });
+    it("Kanji to Hiragana with furigana(2)", async () => {
+        const ori = EXAMPLE_TEXT2;
+        const result = await kuroshiro.convert(ori, { mode: "furigana", to: "hiragana" });
+        expect(result).toEqual("2000<ruby>年<rp>(</rp><rt>ねん</rt><rp>)</rp></ruby>");
     });
 });
